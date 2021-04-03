@@ -32,8 +32,10 @@ public:
     /**
      * @brief start the thread
      * 
+     * @return true start successfully
+     * @return false already started
      */
-    void start();
+    bool start();
 
 protected:
     /**
@@ -81,7 +83,7 @@ public:
     double execTime_ms();
 
 private:
-    bool isActive; ///< flag to show if the thread is active
+    bool started; ///< flag to show if the thread is active
     Chrono mChrono; ///< a chronometer
 };
 

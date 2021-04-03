@@ -14,6 +14,7 @@
 
 Thread::Thread()
 {
+    started=false;
     mChrono=Chrono();
 }
 
@@ -22,12 +23,16 @@ Thread::~Thread()
 
 }
 
-void Thread::start()
+bool Thread::start()
 {
-    if(!isActive)
+    if(!started)
     {
-        isActive = true;
+        started = true;
         PosixThread::start(call_run, this);
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -37,7 +42,7 @@ void* Thread::call_run(void* v_thread)
     thread->mChrono.restart();
 	thread->run();
 	thread->mChrono.stop();
-    thread->isActive = false;
+    thread->started = false;
     return (void*) thread;
 }
 
