@@ -37,7 +37,7 @@ int main()
 
     //create thread, assume each time unit is 100ms
     // A starts at t=30, demande the mutex 10 units later, release the mutex 10 later, the total execute time is 40 units,
-    CpuLoopMutex threadA(&loopA, policy, priorityA, &mutex, 3000, 4000, 1000, 1000);
+    CpuLoopMutex threadA(&loopA, policy, priorityA, &mutex, 3000.0, 4000.0, 1000.0, 1000.0);
     CpuLoopMutex threadB(&loopB, policy, priorityB, &mutex, 3000, 1000, -1, -1); ///< no mutex
     CpuLoopMutex threadC(&loopC, policy, priorityC, &mutex, 0, 5000, 2000, 2000);
     

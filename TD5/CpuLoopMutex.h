@@ -55,10 +55,10 @@ protected:
 private:
     Mutex *pMutex;
     CpuLoop *pCpuLoop;
-    double startTime;
-    double executionTime;
-    double getMutexTime;
-    double holdMutexTime;
+    double mStartTime;
+    double mExecutionTime;
+    double mGetMutexTime;
+    double mHoldMutexTime;
     int priority;
 };
 

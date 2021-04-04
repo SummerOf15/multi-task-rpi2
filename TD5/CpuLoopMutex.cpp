@@ -13,21 +13,16 @@
 #include "TimeUtils.h"
 
 
-CpuLoopMutex::CpuLoopMutex()
-{
-
-}
-
 CpuLoopMutex::CpuLoopMutex(CpuLoop *cpuLoop, int schedPolicy, int schedPriority, Mutex *mutex, double startTime, double executionTime, double getMutexTime, double holdMutexTime)
 {
     pMutex=mutex;
     pCpuLoop=cpuLoop;
     priority=schedPriority;
     setScheduling(schedPolicy, schedPriority);
-    startTime=startTime;
-    executionTime=executionTime;
-    getMutexTime=getMutexTime;
-    holdMutexTime=holdMutexTime;
+    mStartTime=startTime;
+    mExecutionTime=executionTime;
+    mGetMutexTime=getMutexTime;
+    mHoldMutexTime=holdMutexTime;
 }
 
 CpuLoopMutex::~CpuLoopMutex()
@@ -38,25 +33,25 @@ CpuLoopMutex::~CpuLoopMutex()
 void CpuLoopMutex::run()
 {  
     
-    if(holdMutexTime!=-1) ///< when there is no mutex
+    if(mHoldMutexTime!=-1) ///< when there is no mutex
     {
-        sleep_ms(startTime);
+        sleep_ms(mStartTime);
         ///< wait for the start of task
         cout<< "priority "<<priority<<" starts thread"<<endl;
-        pCpuLoop->runTime(getMutexTime); ///< run task until demande the mutex
+        pCpuLoop->runTime(mGetMutexTime); ///< run task until demande the mutex
         cout<<"priority "<<priority<<" asks for mutex"<<endl;
-        Mutex::Lock lock(*pMutex, holdMutexTime); ///< lock mutex and unlock after holdMutexTime 
-        pCpuLoop->runTime(holdMutexTime); ///< read and write the resource
+        Mutex::Lock lock(*pMutex, mHoldMutexTime); ///< lock mutex and unlock after holdMutexTime 
+        pCpuLoop->runTime(mHoldMutexTime); ///< read and write the resource
         lock.~Lock();  ///< unlock
         cout<<"priority "<<priority<<" releases mutex"<<endl;
-        pCpuLoop->runTime(executionTime-getMutexTime-holdMutexTime); ///< after unlock the mutex, keep running.
+        pCpuLoop->runTime(mExecutionTime-mGetMutexTime-mHoldMutexTime); ///< after unlock the mutex, keep running.
         cout<<"priority "<<priority<<" terminates"<<endl;
     }
     else ///< when there is a mutex
     {
-        sleep_ms(startTime); ///< wait for the start of task
+        sleep_ms(mStartTime); ///< wait for the start of task
         cout<< "priority "<<priority<<" starts thread"<<endl;
-        pCpuLoop->runTime(executionTime);
+        pCpuLoop->runTime(mExecutionTime);
         cout<<"priority "<<priority<<" terminates"<<endl;
     }
 }
