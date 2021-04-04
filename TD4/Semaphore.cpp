@@ -21,29 +21,27 @@ Semaphore::Semaphore(unsigned initCount, unsigned maximumCount)
 
 void Semaphore::give()
 {
-    Mutex::Lock lock(mMutex); ///< lock the number
+    Mutex::Lock lock(mMutex); ///< automatically unlock when the function is over
     while(counter > maxCount)
     {
         lock.wait();
     }
     counter++;
-    lock.notify();
 }
 
 void Semaphore::take()
 {
-    Mutex::Lock lock(mMutex);
+    Mutex::Lock lock(mMutex); ///< automatically unlock when the function is over
     while(counter == 0)
     {
         lock.wait();
     }
     counter--;
-    lock.notify(); ///< unlock the number
 }
 
 bool Semaphore::take(double timeout_ms)
 {
-    Mutex::Lock lock(mMutex);
+    Mutex::Lock lock(mMutex); ///< automatically unlock when the function is over
     if(counter == 0)
     {
         lock.wait(timeout_ms);
@@ -53,6 +51,5 @@ bool Semaphore::take(double timeout_ms)
         return false;
     }
     counter--;
-    lock.notify(); ///< unlock the number
     return true;
 }

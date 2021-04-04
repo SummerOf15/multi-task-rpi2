@@ -84,7 +84,7 @@ private:
 };
 
 
-class Mutex::Monitor
+class Mutex:: Monitor
 {
 protected:
     /**
@@ -123,7 +123,7 @@ public:
     void notifyAll();
 
 public:
-    Mutex &mtx; ///< mutex
+    Mutex &mMutex; ///< mutex
     class TimeoutException : std::exception
     {
         public:
