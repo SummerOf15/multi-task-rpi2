@@ -37,9 +37,10 @@ CpuLoopMutex::~CpuLoopMutex()
 
 void CpuLoopMutex::run()
 {  
-    sleep_ms(startTime);
+    
     if(holdMutexTime!=-1) ///< when there is no mutex
     {
+        sleep_ms(startTime);
         ///< wait for the start of task
         cout<< "priority "<<priority<<" starts thread"<<endl;
         pCpuLoop->runTime(getMutexTime); ///< run task until demande the mutex

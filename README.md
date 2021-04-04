@@ -86,7 +86,7 @@ arm-linux-g++ -Wall -Wextra Timer.cpp TimeUtils.cpp Looper.cpp Chrono.cpp Calibr
 ### td3c
 
 ```bash
-g++ -Wall -Wextra Timer.cpp TimeUtils.cpp Chrono.cpp Calibrator.cpp Looper.cpp CpuLoop.cpp main_td3c.cpp -o td3c.rpi2 -lrt -lpthread
+arm-linux-g++ -Wall -Wextra Timer.cpp TimeUtils.cpp Chrono.cpp Calibrator.cpp Looper.cpp CpuLoop.cpp main_td3c.cpp -o td3c.rpi2 -lrt -lpthread
 
 ./td3c.rpi2 
 ```
