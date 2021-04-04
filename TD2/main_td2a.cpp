@@ -32,9 +32,9 @@ struct Data{
  */
 void incr(unsigned int nLoops, double* pCounter)
 {
-    for(int i=0;i<nLoops;i++)
+    for(unsigned i=0;i<nLoops;i++)
     {
-        *pCounter+=1,0;
+        *pCounter+=1.0;
     }
 }
 
@@ -67,12 +67,12 @@ int main(int argc, char* argv[])
     data.loop=nLoops;
 
     vector<pthread_t> incrThread(nTasks);
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         pthread_create(&incrThread[i], nullptr, call_incr, &data);
     }
 
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         pthread_join(incrThread[i], nullptr);
     }

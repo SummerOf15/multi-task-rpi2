@@ -59,7 +59,7 @@ Producer::~Producer()
 
 void Producer::run()
 {
-    for(int i=0;i<mMaxCount;i++)
+    for(unsigned i=0;i<mMaxCount;i++)
     {
         pSemaphore->give();
         mCounter++;

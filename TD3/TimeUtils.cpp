@@ -100,7 +100,7 @@ timespec& operator-= (timespec& time_ts, const timespec& delay_ts)
 
 bool operator== (const timespec& time1_ts, const timespec& time2_ts)
 {
-    if(time1_ts.tv_nsec==time2_ts.tv_nsec && time1_ts.tv_sec==time1_ts.tv_sec)
+    if(time1_ts.tv_nsec==time2_ts.tv_nsec && time1_ts.tv_sec==time2_ts.tv_sec)
     {
         return true;
     }
@@ -112,7 +112,7 @@ bool operator== (const timespec& time1_ts, const timespec& time2_ts)
 
 bool operator!= (const timespec& time1_ts, const timespec& time2_ts)
 {
-    if(time1_ts.tv_nsec==time2_ts.tv_nsec && time1_ts.tv_sec==time1_ts.tv_sec)
+    if(time1_ts.tv_nsec==time2_ts.tv_nsec && time1_ts.tv_sec==time2_ts.tv_sec)
     {
         return false;
     }
@@ -195,9 +195,9 @@ void generate_timer(int hz, int iteration, double* pCounter)
 
 void incr(unsigned int nLoops, double* pCounter)
 {
-    for(int i=0;i<nLoops;i++)
+    for(unsigned i=0;i<nLoops;i++)
     {
-        *pCounter+=1,0;
+        *pCounter+=1.0;
     }
 }
 

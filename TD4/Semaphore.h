@@ -48,7 +48,7 @@ public:
     bool take(double timeout_ms);
 
 private:
-    unsigned counter; ///< current number of jetons in this Semaphore
+    volatile unsigned counter; ///< current number of jetons in this Semaphore
     unsigned maxCount; ///< maximum number of jetons 
     Mutex mMutex;
 };

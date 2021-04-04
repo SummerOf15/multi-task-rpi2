@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2021
  * 
  */
+#include "TimeUtils.h"
 #include <pthread.h>
 #include <iostream>
 #include <vector>
@@ -23,19 +24,6 @@ struct Data{
     double counter;///< counter
 };
 
-/**
- * @brief increase the count
- * 
- * @param nLoops number of loops 
- * @param pCounter counter
- */
-void incr(unsigned int nLoops, double* pCounter)
-{
-    for(int i=0;i<nLoops;i++)
-    {
-        *pCounter+=1,0;
-    }
-}
 
 /**
  * @brief callback function
@@ -53,7 +41,7 @@ void* call_incr(void* v_data)
 
 int main(int argc, char* argv[])
 {
-    if(argc!=3)
+    if(argc!=4)
     {
         cerr<<"only "<<argc-1<<" but expect 3 parameters are provided"<<endl; 
         return -1;
@@ -63,26 +51,16 @@ int main(int argc, char* argv[])
     string sched=argv[3];
     int schedPolicy;
 
-    // set main function with the highest priority 
-    struct sched_param schedParamMain;
-    schedParamMain.sched_priority = sched_get_priority_max(SCHED_RR);
-    pthread_setschedparam(pthread_self(), SCHED_RR, &schedParamMain);
-
-    sched_param schedParamThread;
-
     if (sched.compare("SCHED_RR")==0)
     {
-        schedParamThread.sched_priority = 5;
         schedPolicy=SCHED_RR;
     }
     else if (sched.compare("SCHED_FIFO")==0)
     {
-        schedParamThread.sched_priority = 3;
         schedPolicy=SCHED_FIFO;
     }
     else if(sched.compare("SCHED_OTHER")==0)
     {
-        schedParamThread.sched_priority = 0;
         schedPolicy=SCHED_OTHER;
     }
     else
@@ -90,10 +68,21 @@ int main(int argc, char* argv[])
         cerr<<"unknown sched policy"<<endl;
         return -1;
     }
-    
+
+    // set main function with the highest priority 
+    struct sched_param schedParamMain;
+    schedParamMain.sched_priority = sched_get_priority_max(schedPolicy);
+    pthread_setschedparam(pthread_self(), schedPolicy, &schedParamMain);
+
+    // sched parameters of the thread
+    sched_param schedParamThread;
     pthread_attr_t attr;
+
+    int priority = rand()%99 + 1;
+    schedParamThread.sched_priority = (schedPolicy == SCHED_OTHER) ? 0 : priority;
+
     pthread_attr_init(&attr);
-    pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
+    pthread_attr_setinheritsched(&attr, schedPolicy);
     pthread_attr_setschedparam(&attr, &schedParamThread);
 
     Data data;
@@ -101,7 +90,10 @@ int main(int argc, char* argv[])
     data.loop=nLoops;
 
     vector<pthread_t> incrThread(nTasks);
-    for(int i=0;i<nTasks;i++)
+
+    timespec start, end;
+    start=timespec_now();
+    for(unsigned i=0;i<nTasks;i++)
     {
         
         pthread_create(&incrThread[i], &attr, call_incr, &data);
@@ -109,11 +101,12 @@ int main(int argc, char* argv[])
 
     pthread_attr_destroy(&attr);
 
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         pthread_join(incrThread[i], nullptr);
     }
+    end=timespec_now();
     cout<<"counter value: "<<data.counter<<endl;
-
+    cout<<"duration: "<<timespec_to_ms(end-start)<<"ms"<<endl;
     return 0;
 }

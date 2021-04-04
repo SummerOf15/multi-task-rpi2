@@ -30,14 +30,14 @@ int main(int argc, char* argv[])
     double count=0.0;
 
     vector<IncrThread> incrThread(nTasks);
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         int priority=rand()%99+1;
         incrThread[i]=IncrThread(nLoops,&count,priority, SCHED_RR);
         incrThread[i].start();
     }
 
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         incrThread[i].join();
         cout<<"thread "<<i<<" time is "<<incrThread[i].execTime_ms()<<endl;

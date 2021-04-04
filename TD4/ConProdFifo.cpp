@@ -68,7 +68,7 @@ Producer::~Producer()
 
 void Producer::run()
 {
-    for(int i=0; i<mMaxCounter; i++)
+    for(unsigned i=0; i<mMaxCounter; i++)
     {
         pFifo->push(i);
         mCounter++;

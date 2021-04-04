@@ -27,19 +27,6 @@ struct Data{
     bool useMutex;  ///< whether use the mutex
 };
 
-/**
- * @brief increase the counter for nLoops
- * 
- * @param nLoops the number of loops
- * @param pCounter counter
- */
-void incr(unsigned int nLoops, double* pCounter)
-{
-    for(int i=0;i<nLoops;i++)
-    {
-        *pCounter+=1,0;
-    }
-}
 
 /**
  * @brief callback function
@@ -51,16 +38,17 @@ void* call_incr(void* v_data)
 {
     Data* pData=(Data*) v_data;
     if(pData->useMutex) ///< if use the mutex
-        for(int i=0;i<pData->loop;i++)
+        for(unsigned i=0;i<pData->loop;i++)
         {
             pthread_mutex_lock(&(pData->mutex)); ///< open the lock
-            pData->counter+=1,0;  ///< change the counter value
+            pData->counter+=1.0;  ///< change the counter value
             pthread_mutex_unlock(&(pData->mutex)); ///< unlock
         }
     else
     {
         incr(pData->loop, &(pData->counter));
     }
+    return (void*) pData;
 }
 
 /**
@@ -99,19 +87,19 @@ int main(int argc, char* argv[])
     timespec start, end, duration;
     start=timespec_now();
     vector<pthread_t> incrThread(nTasks);
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         pthread_create(&incrThread[i], nullptr, call_incr, &data);
     }
 
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         pthread_join(incrThread[i], nullptr);
     }
     end=timespec_now();
     duration=end-start;
     cout<<"counter value: "<<data.counter<<endl;
-    cout<<"time (ms)"<<timespec_to_ms(duration)<<endl;
+    cout<<"time (ms) "<<timespec_to_ms(duration)<<endl;
     
     if(data.useMutex)
         pthread_mutex_destroy(&data.mutex);

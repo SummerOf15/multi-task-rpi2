@@ -195,9 +195,9 @@ void generate_timer(int hz, int iteration, double* pCounter)
 
 void incr(unsigned int nLoops, double* pCounter)
 {
-    for(int i=0;i<nLoops;i++)
+    for(unsigned i=0;i<nLoops;i++)
     {
-        *pCounter+=1,0;
+        *pCounter+=1.0;
     }
 }
 

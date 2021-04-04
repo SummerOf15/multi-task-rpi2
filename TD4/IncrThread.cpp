@@ -31,9 +31,9 @@ IncrThread::~IncrThread()
 
 void IncrThread::run()
 {
-    for(int i=0;i<mLoop;i++)
+    for(unsigned i=0;i<mLoop;i++)
     {
-        *pCounter+=1,0;
+        *pCounter+=1.0;
     }
 }
 

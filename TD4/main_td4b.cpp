@@ -34,14 +34,14 @@ int main(int argc, char* argv[])
     Mutex mutex;
 
     vector<IncrMutex> incrThread(nTasks);
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         int priority=rand()%99+1;
         incrThread[i]=IncrMutex(nLoops,&counter,priority, SCHED_RR, &mutex);
         incrThread[i].start();
     }
 
-    for(int i=0;i<nTasks;i++)
+    for(unsigned i=0;i<nTasks;i++)
     {
         incrThread[i].join();
         cout<<"thread "<<i<<" time is "<<incrThread[i].execTime_ms()<<endl;

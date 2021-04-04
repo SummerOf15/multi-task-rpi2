@@ -30,10 +30,7 @@ bool Thread::start()
         started = true;
         PosixThread::start(call_run, this);
     }
-    else
-    {
-        return false;
-    }
+    return started;
 }
 
 void* Thread::call_run(void* v_thread)

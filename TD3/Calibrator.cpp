@@ -51,14 +51,14 @@ void Calibrator::calcParam(double samplingPeriod_ms, unsigned nSamples )
     double s_x=nSamples * (nSamples + 1) / 2 * samplingPeriod_ms;
 
     // calculate the sum of loop number and time
-    for(int i=0;i<nSamples;i++)
+    for(unsigned i=0;i<nSamples;i++)
     {
         s_y+=samples[i];
     }
 
     double s_xx=nSamples * (nSamples + 1) * (2 * nSamples + 1) / 6 * samplingPeriod_ms * samplingPeriod_ms;
     double s_xy=0;
-    for(int i=0;i<nSamples;i++)
+    for(unsigned i=0;i<nSamples;i++)
     {
         s_xy+=(i+1)*samplingPeriod_ms*samples[i];
     }

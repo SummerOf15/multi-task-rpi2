@@ -33,19 +33,19 @@ int main(int argc, char* argv[])
     vector<Producer> prod(nProd, Producer(&fifo, maxProdItems)); ///< producer array
 
     // start the producer
-    for(int i=0;i<nProd;i++)
+    for(unsigned i=0;i<nProd;i++)
     {
         prod[i].start();
     }
 
     // start the consumer
-    for(int i=0; i<nCons; i++)
+    for(unsigned i=0; i<nCons; i++)
     {
         cons[i].start();
     }
 
     unsigned totalProduction=0;
-    for(int i=0;i<nProd;i++)
+    for(unsigned i=0;i<nProd;i++)
     {
         prod[i].join();
         cout<<"producer "<<i<<" finished work after "<<prod[i].execTime_ms()<<"ms"<<endl;
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
     }
 
     unsigned totalConsumption=0;
-    for(int i=0;i<nCons;i++)
+    for(unsigned i=0;i<nCons;i++)
     {
         cons[i].join(); ///< pop elements until it's empty
         cout<<"consumer "<<i<<" finished work after "<<prod[i].execTime_ms()<<"ms"<<endl;
