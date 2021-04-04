@@ -63,28 +63,27 @@ unsigned incr(itimerspec its)
  * @param n y vector array (the number of loops)
  * @param t x vector array (time)
  */
-void calib(double* a, double* b, vector<unsigned> n, vector<unsigned> t)
+void calib(double* a, double* b, vector<unsigned> samples, double samplingPeriod_ms)
 {
     double s_y=0.0;
-    double s_x=0.0;
-    int numSamples=n.size();
+    unsigned nSamples=samples.size();
+    double s_x=nSamples * (nSamples + 1) / 2 * samplingPeriod_ms;
 
-    // calculate the mean value of loop number and time
-    for(int i=0;i<numSamples;i++)
+    // calculate the sum of loop number and time
+    for(unsigned i=0;i<nSamples;i++)
     {
-        s_y+=n[i];
-        s_x+=t[i];
+        s_y+=samples[i];
     }
 
-    double s_xx, s_xy;
-    for(int i=0;i<numSamples;i++)
+    double s_xx=nSamples * (nSamples + 1) * (2 * nSamples + 1) / 6 * samplingPeriod_ms * samplingPeriod_ms;
+    double s_xy=0;
+    for(unsigned i=0;i<nSamples;i++)
     {
-        s_xx+=t[i]*t[i];
-        s_xy+=t[i]*n[i];
+        s_xy+=(i+1)*samplingPeriod_ms*samples[i];
     }
-
-    *a = (numSamples * s_xy - s_x * s_y) / (numSamples * s_xx - s_x * s_x);
-    *b=s_y-*a*s_x;
+    
+    *a = (nSamples * s_xy - s_x * s_y) / (nSamples * s_xx - s_x * s_x+1e-9);
+    *b=s_y/nSamples-*a*s_x/nSamples;
 }
 
 int main()
@@ -93,34 +92,32 @@ int main()
     double a,b;
     timespec start,end;
     itimerspec its;
-    its.it_value.tv_nsec=0;
+    
     its.it_interval.tv_sec=0; //iterate
     its.it_interval.tv_nsec=0;
     
     int numSamples=5;
+    double samplePeriod=1000;
     for(int i=0;i<numSamples;i++)
     {
-        cout<<"test "<<i+1<<"s"<<endl;
-        its.it_value.tv_sec=(i+1);
-        start=timespec_now();
+        cout<<"test "<<(i+1)*samplePeriod<<"ms"<<endl;
+        its.it_value=timespec_from_ms((i+1)*samplePeriod);
         n.push_back(incr(its));
-        end=timespec_now();
-        t.push_back(timespec_to_ms(end-start)/1000.0);
     }
 
-    calib(&a,&b,n,t);
+    calib(&a,&b,n,samplePeriod);
     cout<<"a="<<a<<",b="<<b<<endl;
 
-    its.it_value.tv_sec=5; //test using 4 s
+    its.it_value=timespec_from_ms(3000); //test using 3 s
     start=timespec_now();
-    unsigned count_5=incr(its);
+    unsigned count_3=incr(its);
     end=timespec_now(); 
-    double duration_5s=timespec_to_ms(end-start)/1000.0;
-    unsigned expectedLoops=(unsigned)(a*duration_5s+b);
-    cout<<"the expected number of loops is "<<expectedLoops<<endl;
-    cout<<"the actual number of loops is "<<count_5<<endl;
-    cout<<"the difference is "<<count_5-expectedLoops<<endl;
-    cout<<"the error is +-"<<(count_5-expectedLoops)*100.0/count_5<<"%"<<endl;
+    double duration_3s=timespec_to_ms(end-start);
+    double expectedLoops=(double)(a*duration_3s+b);
+    cout<<"the expected number of loops is "<<(unsigned)expectedLoops<<endl;
+    cout<<"the actual number of loops is "<<count_3<<endl;
+    cout<<"the difference is "<<abs((int)count_3-(int)expectedLoops)<<endl;
+    cout<<"the error is "<<(abs((int)count_3-(int)expectedLoops)*100.0)/count_3<<"%"<<endl;
 
     return 0;
 }

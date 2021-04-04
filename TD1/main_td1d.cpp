@@ -9,7 +9,7 @@
  * 
  */
 #include "TimeUtils.h"
-
+#include <iostream>
 
 /**
  * @brief timer callback function, to set stop flag as true when time runs out
@@ -95,7 +95,7 @@ int main()
     unsigned expectedLoops=(unsigned)(a*duration_5s+b);
     cout<<"the expected number of loops is "<<expectedLoops<<endl;
     cout<<"the actual number of loops is "<<count_5<<endl;
-    cout<<"the difference is "<<count_5-expectedLoops<<endl;
-    cout<<"the error is "<<(count_5-expectedLoops)*1.0/count_5<<endl;
+    cout<<"the difference is "<<abs((int)count_5-(int)expectedLoops)<<endl;
+    cout<<"the error is "<<abs((int)count_5-(int)expectedLoops)*100.0/count_5<<"%"<<endl;
     return 0;
 }

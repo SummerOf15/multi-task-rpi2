@@ -1,12 +1,50 @@
 # multi-task-rpi2
 Basic examples for multi-task program implemented in rpi2
 
+### td1a
 
+```bash
+arm-linux-g++ -Wall -Wextra TimeUtils.cpp main_td1a.cpp -o td1a.rpi2 -lrt -lpthread
+
+./td1a.rpi2
+```
+
+### td1b
+
+```bash
+arm-linux-g++ -Wall -Wextra TimeUtils.cpp main_td1b.cpp -o td1b.rpi2 -lrt -lpthread
+
+./td1b.rpi2
+```
+
+### td1c
+
+```bash
+arm-linux-g++ -Wall -Wextra TimeUtils.cpp main_td1c.cpp -o td1c.rpi2 -lrt -lpthread
+
+./td1c.rpi2 <nLoops>
+```
+
+### td1d
+
+```bash
+arm-linux-g++ -Wall -Wextra TimeUtils.cpp main_td1d.cpp -o td1d.rpi2 -lrt -lpthread
+
+./td1d.rpi2
+```
+
+### td1e
+
+```bash
+arm-linux-g++ -Wall -Wextra TimeUtils.cpp main_td1e.cpp -o td1e.rpi2 -lrt -lpthread
+
+ ./td1e.rpi2
+```
 
 ### td2a
 
 ```bash
-g++ -Wall -Wextra main_td2a.cpp -o td2a.rpi2  -lrt -lpthread
+arm-linux-g++ -Wall -Wextra main_td2a.cpp -o td2a.rpi2  -lrt -lpthread
 
 ./td2a.rpi2 <nLoops> <nTasks>
 ```
@@ -14,7 +52,7 @@ g++ -Wall -Wextra main_td2a.cpp -o td2a.rpi2  -lrt -lpthread
 ### td2b
 
 ```bash
-g++ -Wall -Wextra TimeUtils.cpp main_td2b.cpp -o td2b.rpi2  -lrt -lpthread
+arm-linux-g++ -Wall -Wextra TimeUtils.cpp main_td2b.cpp -o td2b.rpi2  -lrt -lpthread
 
 ./td2b.rpi2 <nLoops> <nTasks> <Policy>
 ```
@@ -22,7 +60,7 @@ g++ -Wall -Wextra TimeUtils.cpp main_td2b.cpp -o td2b.rpi2  -lrt -lpthread
 ### td2c
 
 ```bash
-g++ -Wall -Wextra TimeUtils.cpp main_td2c.cpp -o td2c.rpi2  -lrt -lpthread
+arm-linux-g++ -Wall -Wextra TimeUtils.cpp main_td2c.cpp -o td2c.rpi2  -lrt -lpthread
 
 ./td2c.rpi2 <nLoops> <nTasks> <protected>
 ```

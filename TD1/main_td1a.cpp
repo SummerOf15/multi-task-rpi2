@@ -15,7 +15,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main()
 {
     timespec start, end, duration;
     const timespec delay{0,500000000l};
