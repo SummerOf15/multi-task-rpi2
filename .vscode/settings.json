@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "iostream": "cpp",
-        "condition_variable": "cpp"
+        "condition_variable": "cpp",
+        "*.tcc": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "typeinfo": "cpp"
     }
 }
